@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/Definux/Seo</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>SEO plugin for ASP.NET Core applications.</Description>
-    <Authors>Georgi Karagogov</Authors>
+    <Authors>Definux</Authors>
     <Copyright>Definux</Copyright>
     <PackageTags>SEO, Sitemap, robots</PackageTags>
     <Version>$(PACKAGE_VERSION)</Version>
