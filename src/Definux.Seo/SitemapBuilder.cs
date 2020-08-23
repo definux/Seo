@@ -27,6 +27,7 @@ namespace Definux.Seo
             this.serviceProvider = serviceProvider;
             this.options = optionsAccessor.Value;
             this.sitemapPatterns = new List<IPageSitemapPattern>();
+            this.baseUrl = this.httpContextAccessor.HttpContext.GetAbsoluteRoute(string.Empty);
             if (this.options.SitemapPatternsTypes != null)
             {
                 foreach (var type in this.options.SitemapPatternsTypes)
@@ -34,8 +35,6 @@ namespace Definux.Seo
                     AddSitemapPattern(type);
                 }
             }
-            
-            this.baseUrl = this.httpContextAccessor.HttpContext.GetAbsoluteRoute(string.Empty);
         }
 
         private void AddSitemapPattern(Type type)
