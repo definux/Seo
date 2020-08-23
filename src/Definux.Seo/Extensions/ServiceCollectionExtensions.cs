@@ -37,7 +37,7 @@ namespace Definux.Seo.Extensions
                     .Where(x => x.GetInterfaces().Contains(patternInterface) && x.IsClass)
                     .FirstOrDefault();
 
-                services.AddTransient(patternInterface, patternImplementation);
+                services.AddScoped(patternInterface, patternImplementation);
             }
 
             services.Configure<DefinuxSeoOptions>(definuxOptions =>
