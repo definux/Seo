@@ -1,6 +1,7 @@
 ﻿using Definux.Seo.Models;
 using Definux.Seo.Options;
 using Definux.Seo.Results;
+using Definux.Utilities.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
@@ -34,7 +35,7 @@ namespace Definux.Seo
                 }
             }
             
-            this.baseUrl = $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{this.httpContextAccessor.HttpContext.Request.Host}";
+            this.baseUrl = this.httpContextAccessor.HttpContext.GetAbsoluteRoute(string.Empty);
         }
 
         private void AddSitemapPattern(Type type)
