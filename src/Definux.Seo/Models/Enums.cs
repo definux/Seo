@@ -10,4 +10,13 @@
         Yearly = 6,
         Never = 7
     }
+
+    public enum MainMetaTags
+    {
+        Title = 1,
+        Description = 2,
+        Keywords = 3,
+        Image = 4,
+        Author = 5
+    }
 }
