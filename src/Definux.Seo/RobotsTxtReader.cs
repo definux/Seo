@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
+﻿using System;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Definux.Seo
 {
+    /// <inheritdoc cref="IRobotsTxtReader"/>
     public sealed class RobotsTxtReader : IRobotsTxtReader
     {
         private const string RobotsTxtFileName = "robots.txt";
         private readonly string contentRootPath;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RobotsTxtReader"/> class.
+        /// </summary>
+        /// <param name="hostingEnvironment"></param>
         public RobotsTxtReader(IHostingEnvironment hostingEnvironment)
         {
             this.contentRootPath = hostingEnvironment.ContentRootPath;
         }
+
+        /// <inheritdoc/>
         public string GetRobotsTxt()
         {
             try

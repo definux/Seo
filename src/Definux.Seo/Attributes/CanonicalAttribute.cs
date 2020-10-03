@@ -5,23 +5,35 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Definux.Seo.Attributes
 {
+    /// <summary>
+    /// Attribute that define the canonical URL of the page.
+    /// </summary>
     public class CanonicalAttribute : ActionFilterAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CanonicalAttribute"/> class.
+        /// </summary>
+        /// <param name="value"></param>
         public CanonicalAttribute(string value)
         {
-            Value = value;
+            this.Value = value;
         }
 
+        /// <summary>
+        /// Canonical URL value.
+        /// </summary>
         public string Value { get; set; }
 
+        /// <inheritdoc cref="ViewDataDictionary"/>
         public ViewDataDictionary ViewData { get; protected set; }
 
+        /// <inheritdoc/>
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var controller = (Controller)context.Controller;
-            ViewData = controller.ViewData;
-            var metaTagsModel = ViewData.GetOrCreateCurrentMetaTagsModel();
-            string value = Value;
+            this.ViewData = controller.ViewData;
+            var metaTagsModel = this.ViewData.GetOrCreateCurrentMetaTagsModel();
+            string value = this.Value;
 
             foreach (var routeParam in controller.RouteData.Values)
             {
@@ -29,7 +41,7 @@ namespace Definux.Seo.Attributes
             }
 
             metaTagsModel.Canonical = value;
-            ViewData.ApplyMetaTagsModel(metaTagsModel);
+            this.ViewData.ApplyMetaTagsModel(metaTagsModel);
 
             base.OnActionExecuted(context);
         }

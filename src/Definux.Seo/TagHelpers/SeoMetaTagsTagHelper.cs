@@ -1,4 +1,5 @@
-﻿using Definux.HtmlBuilder;
+﻿using System.Text;
+using Definux.HtmlBuilder;
 using Definux.Seo.Extensions;
 using Definux.Seo.Models;
 using Definux.Seo.Options;
@@ -8,35 +9,42 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Definux.Seo.TagHelpers
 {
+    /// <summary>
+    /// Tag helper that create all SEO tags based on the decoration of controller or action.
+    /// </summary>
     [HtmlTargetElement("seo-meta-tags", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class SeoMetaTagsTagHelper : TagHelper
     {
         private readonly MetaTagsModel defaultMetaTagsModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SeoMetaTagsTagHelper"/> class.
+        /// </summary>
+        /// <param name="optionsAccessor"></param>
         public SeoMetaTagsTagHelper(IOptions<DefinuxSeoOptions> optionsAccessor)
         {
-            defaultMetaTagsModel = optionsAccessor.Value.DefaultMetaTags;
+            this.defaultMetaTagsModel = optionsAccessor.Value.DefaultMetaTags;
         }
 
+        /// <inheritdoc cref="Microsoft.AspNetCore.Mvc.Rendering.ViewContext"/>
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
+        /// <inheritdoc/>
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            ProcessTagHelper(context, output);
+            this.ProcessTagHelper(context, output);
 
             base.Process(context, output);
         }
 
-        protected virtual void ProcessTagHelper(TagHelperContext context, TagHelperOutput output)
+        private void ProcessTagHelper(TagHelperContext context, TagHelperOutput output)
         {
-            var metaTagsModel = ViewContext.ViewData.GetMetaTagsModelOrDefault();
+            var metaTagsModel = this.ViewContext.ViewData.GetMetaTagsModelOrDefault();
             if (metaTagsModel != null)
             {
                 metaTagsModel.ApplyStaticTags(this.defaultMetaTagsModel);
@@ -44,7 +52,7 @@ namespace Definux.Seo.TagHelpers
                 output.TagName = HtmlTags.Link.Name;
                 output.TagMode = TagMode.StartTagOnly;
                 output.Attributes.Add("rel", "canonical");
-                output.Attributes.Add("href", ViewContext.HttpContext.GetAbsoluteRoute(metaTagsModel.Canonical));
+                output.Attributes.Add("href", this.ViewContext.HttpContext.GetAbsoluteRoute(metaTagsModel.Canonical));
 
                 StringBuilder tagsBuilder = new StringBuilder();
                 tagsBuilder.AppendLine($"<meta charset=\"{metaTagsModel.Charset}\" />");

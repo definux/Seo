@@ -1,25 +1,32 @@
-﻿using Definux.Seo.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Definux.Seo.Models;
 using Definux.Seo.Options;
 using Definux.Seo.Results;
 using Definux.Utilities.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Definux.Seo
 {
+    /// <inheritdoc cref="ISitemapBuilder"/>
     public sealed class SitemapBuilder : ISitemapBuilder
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly string baseUrl;
         private List<IPageSitemapPattern> sitemapPatterns;
         private DefinuxSeoOptions options;
-        private readonly string baseUrl;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SitemapBuilder"/> class.
+        /// </summary>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="serviceProvider"></param>
+        /// <param name="optionsAccessor"></param>
         public SitemapBuilder(
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             IServiceProvider serviceProvider,
             IOptions<DefinuxSeoOptions> optionsAccessor)
         {
@@ -32,18 +39,12 @@ namespace Definux.Seo
             {
                 foreach (var type in this.options.SitemapPatternsTypes)
                 {
-                    AddSitemapPattern(type);
+                    this.AddSitemapPattern(type);
                 }
             }
         }
 
-        private void AddSitemapPattern(Type type)
-        {
-            var pageSitemapPattern = (IPageSitemapPattern)this.serviceProvider.GetService(type);
-            pageSitemapPattern.SetBaseUrl(this.baseUrl);
-            this.sitemapPatterns.Add(pageSitemapPattern);
-        }
-
+        /// <inheritdoc/>
         public async Task<SitemapResult> BuildSitemapAsync()
         {
             var result = new SitemapResult();
@@ -53,6 +54,13 @@ namespace Definux.Seo
             }
 
             return result;
+        }
+
+        private void AddSitemapPattern(Type type)
+        {
+            var pageSitemapPattern = (IPageSitemapPattern)this.serviceProvider.GetService(type);
+            pageSitemapPattern.SetBaseUrl(this.baseUrl);
+            this.sitemapPatterns.Add(pageSitemapPattern);
         }
     }
 }
