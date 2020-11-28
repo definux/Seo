@@ -123,9 +123,10 @@ namespace Definux.Seo.Models
         /// <param name="title"></param>
         public void SetTitle(string title)
         {
-            this.Title.Value = title + this.TitleSuffix;
-            this.OpenGraphTitle.Value = title + this.TitleSuffix;
-            this.TwitterTitle.Value = title + this.TitleSuffix;
+            string titleSuffix = title.EndsWith(this.TitleSuffix, System.StringComparison.OrdinalIgnoreCase) ? string.Empty : this.TitleSuffix;
+            this.Title.Value = title + titleSuffix;
+            this.OpenGraphTitle.Value = title + titleSuffix;
+            this.TwitterTitle.Value = title + titleSuffix;
         }
 
         /// <summary>
