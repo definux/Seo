@@ -65,8 +65,11 @@ namespace Definux.Seo.Attributes
         /// <inheritdoc/>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            this.ViewData.GetOrCreateCurrentMetaTagsModel();
             base.OnActionExecuting(context);
+
+            var controller = (Controller)context.Controller;
+            this.ViewData = controller.ViewData;
+            this.ViewData.GetOrCreateCurrentMetaTagsModel();
         }
     }
 }
