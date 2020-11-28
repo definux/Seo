@@ -1,4 +1,5 @@
-﻿using Definux.Seo.Extensions;
+﻿using System.Threading.Tasks;
+using Definux.Seo.Extensions;
 using Definux.Seo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -59,6 +60,13 @@ namespace Definux.Seo.Attributes
             this.ViewData.ApplyMetaTagsModel(metaTagsModel);
 
             base.OnActionExecuted(context);
+        }
+
+        /// <inheritdoc/>
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            this.ViewData.GetOrCreateCurrentMetaTagsModel();
+            base.OnActionExecuting(context);
         }
     }
 }
