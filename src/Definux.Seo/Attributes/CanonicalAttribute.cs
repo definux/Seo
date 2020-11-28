@@ -45,5 +45,15 @@ namespace Definux.Seo.Attributes
 
             base.OnActionExecuted(context);
         }
+
+        /// <inheritdoc/>
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+
+            var controller = (Controller)context.Controller;
+            this.ViewData = controller.ViewData;
+            this.ViewData.GetOrCreateCurrentMetaTagsModel();
+        }
     }
 }
