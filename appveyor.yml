@@ -22,3 +22,11 @@ deploy:
   name: nuget
   on:
     branch: master
+- provider: GitHub
+  tag: v{version}
+  release: '{version}'
+  auth_token:
+    secure: C6D3cCL0/G5S9hyReiIaq6FA/vKmtgB8UGVstzlSs20bEUJ8mHfdlo8Nu03Sgt70
+  artifact: /.*\.nupkg/
+  on:
+    branch: master
