@@ -20,7 +20,7 @@ namespace Definux.Seo
         [Route("/robots.txt")]
         public IActionResult Robots([FromServices]IRobotsTxtReader robotsTxtReader)
         {
-            return this.Ok(robotsTxtReader.GetRobotsTxt());
+            return this.Content(robotsTxtReader.GetRobotsTxt());
         }
 
         /// <summary>
