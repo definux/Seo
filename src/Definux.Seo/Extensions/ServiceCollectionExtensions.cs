@@ -27,27 +27,12 @@ namespace Definux.Seo.Extensions
                 optionsAction.Invoke(options);
             }
 
+            services.AddScoped(typeof(ISitemapComposition), options.SitemapCompositionType);
             services.AddScoped<ISitemapBuilder, SitemapBuilder>();
             services.AddScoped<IRobotsTxtReader, RobotsTxtReader>();
 
-            var patternsInterfaces = patternsAssembly
-                .GetTypes()
-                .Where(x => x.GetInterfaces()
-                    .Contains(typeof(IPageSitemapPattern)) && x.IsInterface);
-
-            foreach (var patternInterface in patternsInterfaces)
-            {
-                var patternImplementation = patternsAssembly
-                    .GetTypes()
-                    .Where(x => x.GetInterfaces().Contains(patternInterface) && x.IsClass)
-                    .FirstOrDefault();
-
-                services.AddScoped(patternInterface, patternImplementation);
-            }
-
             services.Configure<DefinuxSeoOptions>(definuxOptions =>
             {
-                definuxOptions.SitemapPatternsTypes = patternsInterfaces;
                 definuxOptions.DefaultMetaTags = options.DefaultMetaTags;
             });
 

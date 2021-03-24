@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Definux.Seo.Results;
 
 namespace Definux.Seo.Models
 {
-    /// <inheritdoc cref="IPageSitemapPattern"/>
-    public abstract class PageSitemapPattern
+    /// <summary>
+    /// Definition of sitemap page structure. Its purpose is to defines the pattern of single/multiple page/s of the sitemap.
+    /// </summary>
+    public class PageSitemapPattern
     {
         private string baseUrl;
 
@@ -32,18 +36,33 @@ namespace Definux.Seo.Models
         /// <inheritdoc cref="SeoChangeFrequencyTypes"/>
         public SeoChangeFrequencyTypes ChangeFrequency { get; set; } = SeoChangeFrequencyTypes.Always;
 
-        /// <inheritdoc cref="IPageSitemapPattern.SetBaseUrl(string)"/>
+        /// <summary>
+        /// Function that contains logic for accessing data from any source for generating the sitemap.
+        /// </summary>
+        public Func<Task<IEnumerable<string[]>>> DataAccessor { get; set; }
+
+        /// <summary>
+        /// Set the base URL of the page.
+        /// </summary>
+        /// <param name="baseUrl"></param>
         public void SetBaseUrl(string baseUrl)
         {
             this.baseUrl = baseUrl;
         }
 
-        /// <inheritdoc cref="IPageSitemapPattern.BuildPatternUrlsAsync()"/>
+        /// <summary>
+        /// Builds the collection of sitemap URLs that must be added to the <see cref="SitemapResult"/>.
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<SitemapUrl>> BuildPatternUrlsAsync()
         {
             var result = new List<SitemapUrl>();
             string domain = string.IsNullOrWhiteSpace(this.Domain) ? this.baseUrl : this.Domain;
-            var data = await this.PrepareDataAsync();
+            IEnumerable<string[]> data = new List<string[]>();
+            if (this.DataAccessor != null)
+            {
+                data = await this.DataAccessor?.Invoke();
+            }
 
             foreach (var pattern in this.Patterns)
             {
@@ -55,7 +74,7 @@ namespace Definux.Seo.Models
                         result.Add(new SitemapUrl
                         {
                             Location = $"{domain}{route}",
-                            Priority = this.Priority.ToString(),
+                            Priority = this.Priority.ToString(CultureInfo.InvariantCulture),
                             ChangeFrequency = this.ChangeFrequency.ToString(),
                         });
                     }
@@ -65,22 +84,13 @@ namespace Definux.Seo.Models
                     result.Add(new SitemapUrl
                     {
                         Location = $"{domain}{pattern}",
-                        Priority = this.Priority.ToString(),
+                        Priority = this.Priority.ToString(CultureInfo.InvariantCulture),
                         ChangeFrequency = this.ChangeFrequency.ToString(),
                     });
                 }
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Method which main purpose is to be used for data preparing for the sitemap pattern item.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async Task<List<string[]>> PrepareDataAsync()
-        {
-            return new List<string[]>();
         }
     }
 }

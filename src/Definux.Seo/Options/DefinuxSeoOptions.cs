@@ -14,18 +14,27 @@ namespace Definux.Seo.Options
         /// </summary>
         public DefinuxSeoOptions()
         {
-            this.SitemapPatternsTypes = new List<Type>();
             this.DefaultMetaTags = new MetaTagsModel();
         }
 
         /// <summary>
-        /// Collection of all sitemap patterns types which will be used for sitemap generation.
+        /// Implementation type of <see cref="ISitemapComposition"/>.
         /// </summary>
-        public IEnumerable<Type> SitemapPatternsTypes { get; set; }
+        public Type SitemapCompositionType { get; private set; }
 
         /// <summary>
         /// Default meta tags model.
         /// </summary>
         public MetaTagsModel DefaultMetaTags { get; set; }
+
+        /// <summary>
+        /// Set type
+        /// </summary>
+        /// <typeparam name="TSitemapComposition">Sitemap composition implementation type.</typeparam>
+        public void SetSitemapComposition<TSitemapComposition>()
+            where TSitemapComposition : class, ISitemapComposition
+        {
+            this.SitemapCompositionType = typeof(TSitemapComposition);
+        }
     }
 }
