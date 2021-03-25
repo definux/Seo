@@ -16,16 +16,12 @@ namespace Definux.Seo.Extensions
         /// Register Definux SEO plugin.
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="patternsAssembly"></param>
         /// <param name="optionsAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDefinuxSeo(this IServiceCollection services, Assembly patternsAssembly, Action<DefinuxSeoOptions> optionsAction = null)
+        public static IServiceCollection AddDefinuxSeo(this IServiceCollection services, Action<DefinuxSeoOptions> optionsAction = null)
         {
-            DefinuxSeoOptions options = new DefinuxSeoOptions();
-            if (optionsAction != null)
-            {
-                optionsAction.Invoke(options);
-            }
+            var options = new DefinuxSeoOptions();
+            optionsAction?.Invoke(options);
 
             services.AddScoped(typeof(ISitemapComposition), options.SitemapCompositionType);
             services.AddScoped<ISitemapBuilder, SitemapBuilder>();

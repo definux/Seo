@@ -16,7 +16,7 @@ namespace SampleSeo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddDefinuxSeo(Assembly.GetCallingAssembly(), options =>
+            services.AddDefinuxSeo(options =>
             {
                 options.SetSitemapComposition<SitemapComposition>();
             });
