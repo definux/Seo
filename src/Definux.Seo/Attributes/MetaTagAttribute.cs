@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Definux.Seo.Extensions;
 using Definux.Seo.Models;
+using Definux.Utilities.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -48,7 +49,6 @@ namespace Definux.Seo.Attributes
         {
             var controller = (Controller)context.Controller;
             this.ViewData = controller.ViewData;
-
             var metaTagsModel = this.ViewData.GetOrCreateCurrentMetaTagsModel();
             string value = this.Value;
             if (this.ExtractValueFromViewData)
@@ -58,7 +58,6 @@ namespace Definux.Seo.Attributes
 
             metaTagsModel.SetMetaTag(this.Type, value);
             this.ViewData.ApplyMetaTagsModel(metaTagsModel);
-
             base.OnActionExecuted(context);
         }
 

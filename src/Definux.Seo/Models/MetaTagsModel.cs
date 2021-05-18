@@ -13,6 +13,11 @@ namespace Definux.Seo.Models
         public string TitleSuffix { get; set; }
 
         /// <summary>
+        /// Canonical link of the page.
+        /// </summary>
+        public string Canonical { get; set; }
+
+        /// <summary>
         /// HTML charset. Default value is "utf-8".
         /// </summary>
         public string Charset { get; set; } = "utf-8";

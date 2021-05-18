@@ -52,7 +52,7 @@ namespace Definux.Seo.TagHelpers
                 output.TagName = HtmlTags.Link.Name;
                 output.TagMode = TagMode.StartTagOnly;
                 output.Attributes.Add("rel", "canonical");
-                output.Attributes.Add("href", this.ViewContext.HttpContext.GetAbsoluteRoute(this.ViewContext.HttpContext.Request.Path.Value));
+                output.Attributes.Add("href", metaTagsModel.Canonical);
 
                 StringBuilder tagsBuilder = new StringBuilder();
                 tagsBuilder.AppendLine($"<meta charset=\"{metaTagsModel.Charset}\" />");
