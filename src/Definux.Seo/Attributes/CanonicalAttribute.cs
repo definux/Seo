@@ -34,10 +34,17 @@ namespace Definux.Seo.Attributes
             var controller = (Controller)context.Controller;
             this.ViewData = controller.ViewData;
             var metaTagsModel = this.ViewData.GetOrCreateCurrentMetaTagsModel();
-            metaTagsModel.Canonical = this.Href;
-            if (string.IsNullOrWhiteSpace(metaTagsModel.Canonical))
+
+            if (string.IsNullOrWhiteSpace(this.Href))
             {
-                metaTagsModel.Canonical = context.HttpContext.GetAbsoluteRoute(context.HttpContext.Request.Path.Value);
+                string href = context.HttpContext.GetAbsoluteRoute(context.HttpContext.Request.Path.Value);
+                metaTagsModel.Canonical = href;
+                metaTagsModel.OpenGraphUrl.Value = href;
+            }
+            else
+            {
+                metaTagsModel.Canonical = this.Href;
+                metaTagsModel.OpenGraphUrl.Value = this.Href;
             }
 
             this.ViewData.ApplyMetaTagsModel(metaTagsModel);
